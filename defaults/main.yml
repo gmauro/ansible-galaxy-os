@@ -16,6 +16,7 @@ install_maintainance_packages: yes
 add_system_users: yes
 
 galaxy_user_name: galaxy
+galaxy_user_home: /home/galaxy
 galaxy_user_uid: 1001
 galaxy_user_gid: 1001
 
