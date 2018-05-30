@@ -17,7 +17,7 @@
   file: path={{ postgres_user_home }} group={{ postgres_user_name }} owner={{ postgres_user_name }} recurse=yes
  
 - name: Add galaxy user
-  user: name={{ galaxy_user_name }} home={{ galaxy_user_home|default(None) }} uid={{ galaxy_user_uid }} shell=/bin/bash groups={{ galaxy_user_name }},shadow
+  user: name={{ galaxy_user_name }} home={{ galaxy_user_home }} uid={{ galaxy_user_uid }} shell=/bin/bash groups={{ galaxy_user_name }},shadow
 
 - name: Add nobody user to shadow group
   user: name=nobody groups=shadow
