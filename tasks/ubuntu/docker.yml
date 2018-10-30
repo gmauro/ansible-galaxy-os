@@ -3,19 +3,19 @@
     name: "{{ packages }}"
     state: "{{ apt_packages_state }}"
     install_recommends: no
-    vars:
-      packages:
-      - "{{ docker_package }}"
+  vars:
+    packages:
+    - "{{ docker_package }}"
   when: install_packages
 
 - name: Install apparmor
   apt:
     name: "{{ packages }}"
     state: "{{ apt_packages_state }}"
-    vars:
-      packages:
-      - apparmor
-      - cgroup-lite
+  vars:
+    packages:
+    - apparmor
+    - cgroup-lite
   when: install_apparmor
 
 - name: Allow galaxy user to run docker with sudo
