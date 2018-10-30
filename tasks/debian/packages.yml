@@ -1,10 +1,14 @@
 ---
 - name: Prerequisites
-  apt: name={{ item }} state={{ apt_package_state }} update_cache=yes
-  with_items:
-    - apt-utils
-    - apt-transport-https
-    - ca-certificates
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    update_cache: yes
+    vars:
+      packages:
+      - apt-utils
+      - apt-transport-https
+      - ca-certificates
 
 - name: Add Docker repository key
   apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
@@ -18,65 +22,86 @@
   apt: update_cache=yes
 
 - name: Install required system packages
-  apt: pkg={{ item }} state={{ apt_package_state }} install_recommends=no
-  with_items:
-    - ant
-    - cmake
-    - curl
-    - g++
-    - gcc
-    - gfortran
-    - git
-    - libffi-dev
-    - liblapack-dev
-    - libncurses5-dev
-    - libopenblas-dev
-    - libpam0g-dev
-    - libpq-dev
-    - libsparsehash-dev
-    - make
-    - mercurial
-    - nginx-extras
-    - openssh-server
-    - patch
-    - pkg-config
-    - postgresql
-    - postgresql-client
-    - python-boto
-    - python-dev
-    - python-prettytable
-    - python-psycopg2
-    - python-virtualenv
-    - python-pip
-    - rsync
-    - samtools
-    - slurm-drmaa-dev
-    - sudo
-    - supervisor
-    - swig
-    - sysstat
-    - unzip
-    - wget
-    - zlib1g-dev
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    install_recommends: no
+    vars:
+      packages:
+      - ant
+      - cmake
+      - curl
+      - g++
+      - gcc
+      - gfortran
+      - git
+      - libffi-dev
+      - liblapack-dev
+      - libncurses5-dev
+      - libopenblas-dev
+      - libpam0g-dev
+      - libpq-dev
+      - libsparsehash-dev
+      - make
+      - mercurial
+      - nginx-extras
+      - openssh-server
+      - patch
+      - pkg-config
+      - postgresql
+      - postgresql-client
+      - python-boto
+      - python-dev
+      - python-prettytable
+      - python-psycopg2
+      - python-virtualenv
+      - python-pip
+      - rsync
+      - samtools
+      - slurm-drmaa-dev
+      - sudo
+      - supervisor
+      - swig
+      - sysstat
+      - unzip
+      - wget
+      - zlib1g-dev
 
 - name: Install packages for system maintenance
-  apt: pkg={{ item }} state={{ apt_package_state }}
-  with_items:
-    - atop
-    - bioperl
-    - ipython
-    - iotop
-    - htop
-    - iftop
-    - nmon
-    - axel
-    - vim
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    vars:
+      packages:
+      - atop
+      - bioperl
+      - ipython
+      - iotop
+      - htop
+      - iftop
+      - nmon
+      - axel
+      - vim
   when: install_maintainance_packages
 
 - name: Install required system packages - 8
-  apt: pkg={{ item }} state={{ apt_package_state }}
-  with_items:
-    - postgresql-plpython-9.4
-    - postgresql-server-dev-9.4
-    - virtualenv
-  when: ansible_distribution_version >= 8
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    vars:
+      packages:
+      - postgresql-plpython-9.4
+      - postgresql-server-dev-9.4
+      - virtualenv
+  when: ansible_distribution_version == 8
+
+- name: Install required system packages - 9
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    vars:
+      packages:
+      - postgresql-plpython-9.6
+      - postgresql-server-dev-9.6
+      - virtualenv
+  when: ansible_distribution_version == 9
