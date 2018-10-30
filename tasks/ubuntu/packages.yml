@@ -51,7 +51,6 @@
     - libpq-dev
     - libsparsehash-dev
     - make
-    - mercurial
     - nginx-extras
     - openssh-server
     - patch
@@ -97,10 +96,7 @@
     state: "{{ apt_packages_state }}"
   vars:
     packages:
-    - postgresql-9.3
     - postgresql-client-9.3
-    - postgresql-plpython-9.3
-    - postgresql-server-dev-9.3
   when: ansible_distribution_version <= "15.04"
 
 - name: Install required system packages - 15.10
@@ -109,11 +105,7 @@
     state: "{{ apt_packages_state }}"
   vars:
     packages:
-    - postgresql-9.4
     - postgresql-client-9.4
-    - postgresql-plpython-9.4
-    - postgresql-server-dev-9.4
-    - virtualenv
   when: ansible_distribution_version == "15.10"
 
 - name: Install required system packages - 16.04
@@ -122,9 +114,5 @@
     state: "{{ apt_packages_state }}"
   vars:
     packages:
-    - postgresql-9.5
     - postgresql-client-9.5
-    - postgresql-plpython-9.5
-    - postgresql-server-dev-9.5
-    - virtualenv
   when: ansible_distribution_version == "16.04"

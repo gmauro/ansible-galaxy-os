@@ -34,13 +34,10 @@
     - libpq-dev
     - libsparsehash-dev
     - make
-    - mercurial
     - nginx-extras
     - openssh-server
     - patch
     - pkg-config
-    - postgresql
-    - postgresql-client
     - python-boto
     - python-dev
     - python-prettytable
@@ -82,9 +79,7 @@
     state: "{{ apt_packages_state }}"
   vars:
     packages:
-    - postgresql-plpython-9.4
-    - postgresql-server-dev-9.4
-    - virtualenv
+    - postgresql-client-9.4
   when: ansible_distribution_version == 8
 
 - name: Install required system packages - 9
@@ -93,7 +88,5 @@
     state: "{{ apt_packages_state }}"
   vars:
     packages:
-    - postgresql-plpython-9.6
-    - postgresql-server-dev-9.6
-    - virtualenv
+    - postgresql-client-9.6
   when: ansible_distribution_version >= 9
