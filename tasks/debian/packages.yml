@@ -1,7 +1,4 @@
 ---
-- name: Update APT cache
-  apt: update_cache=yes
-
 - name: Prerequisites
   apt:
     name: "{{ packages }}"
@@ -11,6 +8,9 @@
     - apt-utils
     - apt-transport-https
     - ca-certificates
+
+- name: Update APT cache
+  apt: update_cache=yes
 
 - name: Install required system packages
   apt:
