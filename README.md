@@ -5,7 +5,18 @@ running Galaxy.
 
 Requirements
 ------------
-The role has been developed and tested on Ubuntu 14.04 and Debian 8. It requires `sudo` access.
+In order to use this Ansible role, you need:
+
+ * [ansible >= 2.4](http://docs.ansible.com/ansible/intro_installation.html)
+ 
+The role has been developed and tested on:
+
+ * Ubuntu 14.04 
+ * Ubuntu 16.04
+ * Debian 8
+ * Debian 9
+  
+ It requires `sudo` access.
 
 Dependencies
 ------------
