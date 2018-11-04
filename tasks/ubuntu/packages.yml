@@ -102,6 +102,7 @@
   vars:
     packages:
     - postgresql-client-9.4
+    - virtualenv
   when: ansible_distribution_version == "15.10"
 
 - name: Install required system packages - 16.04
@@ -111,4 +112,5 @@
   vars:
     packages:
     - postgresql-client-9.5
+    - virtualenv
   when: ansible_distribution_version == "16.04"

@@ -88,4 +88,5 @@
   vars:
     packages:
     - postgresql-client-9.6
+    - virtualenv
   when: ansible_distribution_major_version == '9'
