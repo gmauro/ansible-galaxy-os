@@ -1,35 +1,38 @@
 ---
 # Install system packages
+- name: Prerequisites
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
+    - apt-utils
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+
 - name: Add custom Galaxy PPA (used for nginx package)
-  apt_repository: repo="ppa:galaxyproject/nginx" update_cache=no
-  when: ansible_distribution_version <= "15.04"
+  apt_repository:
+    repo: "ppa:galaxyproject/nginx"
+    update_cache: no
+  when: ansible_distribution_version <= "16.04"
 
 - name: Pin Galaxy's versions of the PPAs so they take priority over the defaults
-  copy: src=galaxyproject-nginx-pin-600 dest=/etc/apt/preferences.d/galaxyproject-nginx-pin-600
-  when: ansible_distribution_version <= "15.04"
-
-- name: Add custom Galaxy PPA (used for nginx package)
-  apt_repository: repo="ppa:m-vandenbeek/nginx-upload-store" update_cache=no
-  when: ansible_distribution_version > "15.04"
-
-- name: Pin Galaxy's versions of the PPAs so they take priority over the defaults
-  copy: src=m-vandenbeek-nginx-upload-store-pin-600 dest=/etc/apt/preferences.d/m-vandenbeek-nginx-upload-store-pin-600
-  when: ansible_distribution_version > "15.04"
-
-- name: Add Docker repository key
-  apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
-  when: configure_docker
-
-- name: Add Docker repository
-  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main' update_cache=no #'
-  when: configure_docker
+  copy:
+    src: 'galaxyproject-nginx-pin-600'
+    dest: '/etc/apt/preferences.d/galaxyproject-nginx-pin-600'
+  when: ansible_distribution_version <= "16.04"
 
 - name: Update APT cache
   apt: update_cache=yes
 
-- name: Install required system packages
-  apt: pkg={{ item }} state={{ package_state }} install_recommends=no
-  with_items:
+- name: Install required system packages 
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    install_recommends: no
+  vars:
+    packages:
     - ant
     - cmake
     - curl
@@ -45,7 +48,6 @@
     - libpq-dev
     - libsparsehash-dev
     - make
-    - mercurial
     - nginx-extras
     - openssh-server
     - patch
@@ -58,17 +60,20 @@
     - python-pip
     - rsync
     - samtools
-    - slurm-drmaa-dev
     - supervisor
     - swig
     - sysstat
+    - sudo
     - unzip
     - wget
     - zlib1g-dev
 
 - name: Install packages for system maintenance
-  apt: pkg={{ item }} state={{ package_state }}
-  with_items:
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
     - atop
     - bioperl
     - ipython
@@ -81,30 +86,50 @@
   when: install_maintainance_packages
 
 - name: Install required system packages - release_specific
-  apt: pkg={{ item }} state={{ package_state }}
-  with_items:
-    - postgresql-9.3
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
     - postgresql-client-9.3
-    - postgresql-plpython-9.3
-    - postgresql-server-dev-9.3
   when: ansible_distribution_version <= "15.04"
 
+- name: Install required system packages - <= "16.04" 
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    install_recommends: no
+  vars:
+    packages:
+    - slurm-drmaa-dev
+  when: ansible_distribution_version <= "16.04"
+ 
 - name: Install required system packages - 15.10
-  apt: pkg={{ item }} state={{ package_state }}
-  with_items:
-    - postgresql-9.4
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
     - postgresql-client-9.4
-    - postgresql-plpython-9.4
-    - postgresql-server-dev-9.4
     - virtualenv
   when: ansible_distribution_version == "15.10"
 
 - name: Install required system packages - 16.04
-  apt: pkg={{ item }} state={{ package_state }}
-  with_items:
-    - postgresql-9.5
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
     - postgresql-client-9.5
-    - postgresql-plpython-9.5
-    - postgresql-server-dev-9.5
     - virtualenv
   when: ansible_distribution_version == "16.04"
+
+- name: Install required system packages - 18.04
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
+    - postgresql-client-10
+    - virtualenv
+  when: ansible_distribution_version == "18.04"
