@@ -26,7 +26,7 @@
 - name: Update APT cache
   apt: update_cache=yes
 
-- name: Install required system packages
+- name: Install required system packages 
   apt:
     name: "{{ packages }}"
     state: "{{ apt_packages_state }}"
@@ -60,7 +60,6 @@
     - python-pip
     - rsync
     - samtools
-    - slurm-drmaa-dev
     - supervisor
     - swig
     - sysstat
@@ -95,6 +94,16 @@
     - postgresql-client-9.3
   when: ansible_distribution_version <= "15.04"
 
+- name: Install required system packages - <= "16.04" 
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    install_recommends: no
+  vars:
+    packages:
+    - slurm-drmaa-dev
+  when: ansible_distribution_version <= "16.04"
+ 
 - name: Install required system packages - 15.10
   apt:
     name: "{{ packages }}"
@@ -114,3 +123,13 @@
     - postgresql-client-9.5
     - virtualenv
   when: ansible_distribution_version == "16.04"
+
+- name: Install required system packages - 18.04
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
+    - postgresql-client-10
+    - virtualenv
+  when: ansible_distribution_version == "18.04"
