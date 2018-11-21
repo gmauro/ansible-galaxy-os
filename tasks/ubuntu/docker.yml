@@ -4,7 +4,11 @@
 
 - name: Add Docker repository
   apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main' update_cache=yes #'
-  when: configure_docker
+  when: configure_docker and ansible_distribution_release != "bionic" 
+
+- name: Add Docker repository
+  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main' update_cache=yes #'
+  when: configure_docker and ansible_distribution_release == "bionic" 
 
 - name: Install Docker package
   apt:
