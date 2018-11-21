@@ -1,14 +1,33 @@
+- name: Add Docker repository key
+  apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
+  when: configure_docker
+
+- name: Add Docker repository
+  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main' update_cache=yes #'
+  when: configure_docker and ansible_distribution_release != "bionic" 
+
+- name: Add Docker repository
+  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main' update_cache=yes #'
+  when: configure_docker and ansible_distribution_release == "bionic" 
+
 - name: Install Docker package
-  apt: pkg={{ item }} state={{ package_state }} install_recommends=no
-  with_items:
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+    install_recommends: no
+  vars:
+    packages:
     - "{{ docker_package }}"
   when: install_packages
 
 - name: Install apparmor
-  apt: pkg={{ item }} state={{ package_state }}
-  with_items:
-   - apparmor
-   - cgroup-lite
+  apt:
+    name: "{{ packages }}"
+    state: "{{ apt_packages_state }}"
+  vars:
+    packages:
+    - apparmor
+    - cgroup-lite
   when: install_apparmor
 
 - name: Allow galaxy user to run docker with sudo
