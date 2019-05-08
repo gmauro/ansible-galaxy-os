@@ -1,10 +1,7 @@
 ---
 - name: Prerequisites
-  apt:
-    name: "{{ packages }}"
-    state: "{{ apt_packages_state }}"
-  vars:
-    packages:
+  apt: name={{ item }} state={{ package_state }} update_cache=yes
+  with_items:
     - apt-utils
     - apt-transport-https
     - ca-certificates
@@ -13,12 +10,8 @@
   apt: update_cache=yes
 
 - name: Install required system packages
-  apt:
-    name: "{{ packages }}"
-    state: "{{ apt_packages_state }}"
-    install_recommends: no
-  vars:
-    packages:
+  apt: pkg={{ item }} state={{ package_state }} install_recommends=no
+  with_items:
     - ant
     - cmake
     - curl
@@ -46,7 +39,6 @@
     - python-pip
     - rsync
     - samtools
-    - slurm-drmaa-dev
     - sudo
     - supervisor
     - swig
@@ -55,12 +47,15 @@
     - wget
     - zlib1g-dev
 
-- name: Install packages for system maintenance
+- name: Add Slurm DRMAA package
   apt:
-    name: "{{ packages }}"
-    state: "{{ apt_packages_state }}"
-  vars:
-    packages:
+    pkg: slurm-drmaa-dev
+    state: "{{ package_state }}"
+  when: install_slurm_drmaa_lib
+
+- name: Install packages for system maintenance
+  apt: pkg={{ item }} state={{ package_state }}
+  with_items:
     - atop
     - bioperl
     - ipython
@@ -73,20 +68,14 @@
   when: install_maintainance_packages
 
 - name: Install required system packages - 8
-  apt:
-    name: "{{ packages }}"
-    state: "{{ apt_packages_state }}"
-  vars:
-    packages:
-    - postgresql-client-9.4
-  when: ansible_distribution_major_version == '8'
-
-- name: Install required system packages - 9
-  apt:
-    name: "{{ packages }}"
-    state: "{{ apt_packages_state }}"
-  vars:
-    packages:
-    - postgresql-client-9.6
+  apt: pkg={{ item }} state={{ package_state }}
+  with_items:
+    - postgresql-plpython-9.4
+    - postgresql-server-dev-9.4
     - virtualenv
-  when: ansible_distribution_major_version == '9'
+  when: ansible_distribution_version >= 8
+
+- name: Clean up
+  apt:
+    autoclean: yes
+    autoremove: yes

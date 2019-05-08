@@ -5,10 +5,11 @@ services:
  - docker
 
 env:
-  - FILENAME=Dockerfile.ubuntu14.04
-  - FILENAME=Dockerfile.ubuntu16.04
-  - FILENAME=Dockerfile.debian8
-  - FILENAME=Dockerfile.debian9
+  - FILENAME=Dockerfile.centos
+  - FILENAME=Dockerfile.debian
+  - FILENAME=Dockerfile.ubuntu.trusty
+  - FILENAME=Dockerfile.ubuntu.xenial
+  - FILENAME=Dockerfile.ubuntu.bionic
 
 script:
   - docker build -t ansible-galaxy-os -f $FILENAME .
